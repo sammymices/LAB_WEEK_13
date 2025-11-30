@@ -3,6 +3,7 @@ package com.example.test_lab_week_12.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+
 @JsonClass(generateAdapter = true)
 data class Movie(
     val adult: Boolean = false,
