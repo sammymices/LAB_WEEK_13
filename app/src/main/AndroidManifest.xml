@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.test_lab_week_12">
+    package="com.example.lab_week_13">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:name="com.example.test_lab_week_12.MovieApplication"
+        android:label="LAB_WEEK_13"
+        android:name="com.example.lab_week_13.MovieApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TEST_LAB_WEEK_12">
-        <activity android:name="com.example.test_lab_week_12.DetailsActivity"
-            android:parentActivityName="com.example.test_lab_week_12.MainActivity" />
-        <activity android:name="com.example.test_lab_week_12.MainActivity"
+        <activity android:name="com.example.lab_week_13.DetailsActivity"
+            android:parentActivityName="com.example.lab_week_13.MainActivity" />
+        <activity android:name="com.example.lab_week_13.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
