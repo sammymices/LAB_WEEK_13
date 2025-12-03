@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.lab_week_13.databinding.ActivityMainBinding
 import com.example.lab_week_13.model.Movie
-import com.example.lab_week_13.model.MovieViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -32,12 +31,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val spinnerYear = findViewById<Spinner>(R.id.spinner_year)
-        val recyclerView = findViewById<RecyclerView>(R.id.movie_list)
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // FIX #1 — WAJIB
+        val spinnerYear = binding.spinnerYear
+        val recyclerView = binding.movieList
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = movieAdapter
 
@@ -57,33 +57,35 @@ class MainActivity : AppCompatActivity() {
             }
         )[MovieViewModel::class.java]
 
-        // FIX #2 — Listener Spinner yang benar
-        spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                movieViewModel.updateSelectedYear(years[position])
-            }
+        binding.viewModel = movieViewModel
+        binding.lifecycleOwner = this
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
+        spinnerYear.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    movieViewModel.updateSelectedYear(years[position])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 launch {
-                    movieViewModel.filteredMovies.collect { movies ->
-                        movieAdapter.setMovies(movies)
-                    }
-                }
-
-                launch {
                     movieViewModel.error.collect { errorMsg ->
                         if (errorMsg.isNotEmpty()) {
-                            Snackbar.make(recyclerView, errorMsg, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                recyclerView,
+                                errorMsg,
+                                Snackbar.LENGTH_LONG
+                            ).show()
                         }
                     }
                 }
